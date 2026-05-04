@@ -42,3 +42,15 @@ deny[msg] {
   input.instance_type == "t3.micro"
   msg := "Instance type t3.micro is not suitable for production."
 }
+
+deny[msg] {
+  input.environment == "prod"
+  input.instance_type == "t3.micro"
+  msg := "Instance type t3.micro is not allowed in prod environment. Use t3.medium or larger."
+}
+
+deny[msg] {
+  input.environment == "prod"
+  input.instance_type == "t3.small"
+  msg := "Instance type t3.small is not allowed in prod environment. Use t3.medium or larger."
+}
