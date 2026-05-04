@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: petrus-catalog
+  description: Petrus IDP service catalog
+spec:
+  targets:
+    - ./systems.yaml
+    - ./components.yaml

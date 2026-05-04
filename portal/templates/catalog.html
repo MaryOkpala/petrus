@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <div class="page-label">// service catalog</div>
+  <h1 class="page-title">Services</h1>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem">
+    {% for svc in services %}
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.8rem">
+        <span class="badge {{ 'badge-green' if svc.lifecycle == 'production' else 'badge-amber' }}">
+          {{ svc.lifecycle }}
+        </span>
+        <span class="badge badge-dim">{{ svc.type }}</span>
+      </div>
+      <h3 style="font-size:16px;font-weight:600;color:var(--text-bright);margin-bottom:0.4rem">{{ svc.name }}</h3>
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:0.8rem">{{ svc.description }}</p>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-bottom:0.8rem">{{ svc.team }}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.3rem;margin-bottom:1rem">
+        {% for tag in svc.tags %}
+        <span class="badge badge-dim">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      <a href="{{ svc.repo }}" target="_blank" style="font-family:var(--mono);font-size:11px">→ GitHub</a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

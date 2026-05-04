@@ -1,0 +1,75 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: petrus-cli
+  title: Petrus CLI
+  description: Command line interface for self-service environment provisioning
+  tags:
+    - cli
+    - python
+    - devops
+  links:
+    - url: https://github.com/MaryOkpala/petrus
+      title: GitHub
+      icon: github
+  annotations:
+    github.com/project-slug: MaryOkpala/petrus
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: tool
+  lifecycle: production
+  owner: platform-team
+  system: petrus-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payments-api
+  title: Payments API
+  description: Core payments processing API — provisioned via Petrus
+  tags:
+    - api
+    - payments
+    - web-app
+  annotations:
+    petrus.io/environment-type: web-app
+    petrus.io/team: payments
+    petrus.io/namespace: payments-dev
+  links:
+    - url: http://35.174.220.243:31088/applications/payments-dev
+      title: ArgoCD
+      icon: dashboard
+    - url: http://35.174.220.243:31300/d/payments-dev
+      title: Grafana
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: experimental
+  owner: payments-team
+  system: payments-system
+  providesApis:
+    - payments-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: data-science-pipeline
+  title: Data Science ML Pipeline
+  description: AI/ML data pipeline — provisioned via Petrus ai-ml template
+  tags:
+    - ai
+    - ml
+    - data-pipeline
+  annotations:
+    petrus.io/environment-type: ai-ml
+    petrus.io/team: data-science
+    petrus.io/namespace: data-science-staging
+  links:
+    - url: http://35.174.220.243:31088/applications/data-science-staging
+      title: ArgoCD
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: experimental
+  owner: data-science-team
+  system: data-platform

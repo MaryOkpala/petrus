@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+
+  <div style="margin-bottom:3rem">
+    <div class="page-label">// internal developer platform</div>
+    <h1 style="font-size:36px;font-weight:700;color:var(--text-bright);margin-bottom:0.8rem">
+      Petrus
+    </h1>
+    <p style="font-size:16px;color:var(--text);max-width:560px;margin-bottom:1.5rem">
+      Self-service cloud infrastructure. Provision a production-ready environment
+      in minutes. Zero tickets. Policy-enforced by default.
+    </p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap">
+      <a href="/provision" class="btn btn-primary">$ petrus provision</a>
+      <a href="/environments" class="btn btn-ghost">view environments</a>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-val">{{ total_envs }}</div>
+      <div class="stat-label">Active environments</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--green)">{{ healthy }}</div>
+      <div class="stat-label">Healthy</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--blue)">{{ teams }}</div>
+      <div class="stat-label">Teams using Petrus</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--amber)">4</div>
+      <div class="stat-label">Environment templates</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:3rem">
+    <div class="page-label" style="margin-bottom:1rem">// recent environments</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table>
+        <thead>
+          <tr>
+            <th>Team</th><th>Environment</th><th>Type</th>
+            <th>Namespace</th><th>Pods</th><th>Status</th><th>Links</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for env in environments %}
+          <tr>
+            <td><span style="color:var(--text-bright);font-weight:500">{{ env.team }}</span></td>
+            <td>{{ env.environment }}</td>
+            <td><span class="badge badge-dim">{{ env.type }}</span></td>
+            <td><span style="font-family:var(--mono);font-size:12px">{{ env.namespace }}</span></td>
+            <td><span style="font-family:var(--mono);font-size:12px">{{ env.pods }}</span></td>
+            <td><span class="badge badge-green">● {{ env.status }}</span></td>
+            <td>
+              <a href="{{ env.argocd }}" target="_blank" style="font-family:var(--mono);font-size:11px;margin-right:0.8rem">argocd</a>
+              <a href="{{ env.grafana }}" target="_blank" style="font-family:var(--mono);font-size:11px">grafana</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-bottom:3rem">
+    <div class="page-label" style="margin-bottom:1rem">// quick start</div>
+    <div class="terminal-block">
+      <div class="terminal-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="terminal-title">bash — petrus ~</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="ps">$</span> <span class="cmd">petrus provision --type web-app --team payments --env dev</span></div>
+        <div class="out">Checking policies... <span class="out-green">PASSED</span></div>
+        <div class="out">Provisioning network (VPC, subnets, NAT)... <span class="out-green">done</span></div>
+        <div class="out">Creating Kubernetes namespace and RBAC... <span class="out-green">done</span></div>
+        <div class="out">Deploying ArgoCD application... <span class="out-green">done</span></div>
+        <div class="out">Configuring Prometheus monitoring... <span class="out-green">done</span></div>
+        <div class="out" style="margin-top:0.5rem"><span class="out-green">Environment provisioned successfully</span></div>
+        <div class="out">Namespace: payments-dev | Status: Healthy</div>
+        <div style="margin-top:0.8rem"><span class="ps">$</span> <span style="display:inline-block;animation:blink 1.2s step-end infinite;color:var(--green)">_</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<style>@keyframes blink{50%{opacity:0}}</style>
+{% endblock %}

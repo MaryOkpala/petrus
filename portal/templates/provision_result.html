@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page" style="max-width:700px">
+  <div class="page-label">// provision result</div>
+
+  {% if allowed %}
+  <div style="padding:1.5rem;background:rgba(0,230,118,0.05);border:1px solid rgba(0,230,118,0.2);border-radius:8px;margin-bottom:2rem">
+    <div style="font-family:var(--mono);font-size:14px;color:var(--green);margin-bottom:0.5rem">✓ Policy check PASSED</div>
+    <p style="color:var(--text);font-size:14px">
+      Your request is valid. In production Petrus would now provision your environment automatically.
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <div class="page-label" style="margin-bottom:0.8rem">// environment summary</div>
+    <table>
+      <tr><td style="color:var(--text-dim);width:140px">Type</td><td style="font-family:var(--mono)">{{ request.environment_type }}</td></tr>
+      <tr><td style="color:var(--text-dim)">Team</td><td style="font-family:var(--mono)">{{ request.team }}</td></tr>
+      <tr><td style="color:var(--text-dim)">Environment</td><td style="font-family:var(--mono)">{{ request.environment }}</td></tr>
+      <tr><td style="color:var(--text-dim)">Region</td><td style="font-family:var(--mono)">{{ request.region }}</td></tr>
+      <tr><td style="color:var(--text-dim)">Instance</td><td style="font-family:var(--mono)">{{ request.instance_type }}</td></tr>
+      <tr><td style="color:var(--text-dim)">Namespace</td><td style="font-family:var(--mono)">{{ request.team }}-{{ request.environment }}</td></tr>
+    </table>
+  </div>
+
+  {% else %}
+  <div style="padding:1.5rem;background:rgba(255,95,87,0.05);border:1px solid rgba(255,95,87,0.2);border-radius:8px;margin-bottom:2rem">
+    <div style="font-family:var(--mono);font-size:14px;color:var(--red);margin-bottom:1rem">✗ Policy check FAILED</div>
+    {% for v in violations %}
+    <div style="display:flex;gap:0.6rem;margin-bottom:0.5rem">
+      <span style="color:var(--red);font-family:var(--mono)">x</span>
+      <span style="font-size:14px;color:var(--text)">{{ v }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div style="display:flex;gap:1rem">
+    <a href="/provision" class="btn btn-primary">Try again</a>
+    <a href="/environments" class="btn btn-ghost">View environments</a>
+  </div>
+</div>
+{% endblock %}

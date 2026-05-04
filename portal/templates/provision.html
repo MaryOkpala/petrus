@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page" style="max-width:700px">
+  <div class="page-label">// provision</div>
+  <h1 class="page-title">Request a new environment</h1>
+
+  <form method="POST" action="/provision">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="form-group">
+        <label class="form-label">// environment type</label>
+        <select name="env_type" class="form-select" required>
+          {% for t in env_types %}
+          <option value="{{ t }}">{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">// team name</label>
+        <input type="text" name="team" class="form-input" placeholder="payments" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">// environment</label>
+        <select name="environment" class="form-select" required>
+          {% for e in env_names %}
+          <option value="{{ e }}">{{ e }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">// region</label>
+        <select name="region" class="form-select">
+          {% for r in regions %}
+          <option value="{{ r }}">{{ r }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">// instance type</label>
+        <select name="instance_type" class="form-select">
+          <option value="t3.micro">t3.micro (dev only)</option>
+          <option value="t3.small">t3.small</option>
+          <option value="t3.medium" selected>t3.medium</option>
+          <option value="t3.large">t3.large</option>
+          <option value="m5.large">m5.large</option>
+          <option value="m5.xlarge">m5.xlarge (approval req)</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-top:0.5rem">
+      <button type="submit" class="btn btn-primary">
+        $ petrus provision
+      </button>
+    </div>
+  </form>
+
+  <div style="margin-top:2.5rem">
+    <div class="page-label" style="margin-bottom:0.8rem">// what gets provisioned</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      {% for item in [
+        ("VPC + subnets", "Network isolation per environment"),
+        ("EKS namespace", "Kubernetes namespace with RBAC"),
+        ("ArgoCD app", "GitOps delivery from GitHub"),
+        ("Prometheus", "Automatic metrics collection"),
+        ("Grafana dashboard", "Pre-built environment dashboard"),
+        ("Cost tags", "Billing attribution to your team")
+      ] %}
+      <div style="display:flex;gap:0.6rem;align-items:flex-start;padding:0.6rem;background:var(--bg2);border:1px solid var(--border);border-radius:4px">
+        <span style="color:var(--green);font-family:var(--mono);font-size:12px">✓</span>
+        <div>
+          <div style="font-size:13px;color:var(--text-bright);font-weight:500">{{ item[0] }}</div>
+          <div style="font-size:12px;color:var(--text-dim)">{{ item[1] }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

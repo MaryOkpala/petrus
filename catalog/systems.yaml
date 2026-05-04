@@ -1,0 +1,53 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: petrus-platform
+  title: Petrus Platform
+  description: Internal Developer Platform — self-service cloud infrastructure
+  tags:
+    - platform
+    - devops
+    - internal
+  links:
+    - url: http://35.174.220.243:31088
+      title: ArgoCD
+      icon: dashboard
+    - url: http://35.174.220.243:31300
+      title: Grafana
+      icon: dashboard
+    - url: http://35.174.220.243:31090
+      title: Prometheus
+      icon: dashboard
+    - url: https://github.com/MaryOkpala/petrus
+      title: GitHub
+      icon: github
+spec:
+  owner: platform-team
+  domain: platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: payments-system
+  title: Payments System
+  description: Payment processing services
+  tags:
+    - payments
+    - fintech
+spec:
+  owner: payments-team
+  domain: payments
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: data-platform
+  title: Data Platform
+  description: AI and data engineering infrastructure
+  tags:
+    - data
+    - ai
+    - ml
+spec:
+  owner: data-science-team
+  domain: data
