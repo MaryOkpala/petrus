@@ -1,0 +1,63 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: petrus-platform-alerts
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  groups:
+    - name: petrus.environments
+      interval: 30s
+      rules:
+        - alert: PetrusEnvironmentDown
+          expr: up{namespace=~".+-dev|.+-staging|.+-prod"} == 0
+          for: 2m
+          labels:
+            severity: critical
+            managed_by: petrus
+          annotations:
+            summary: "Petrus environment is down"
+            description: "Environment {{ $labels.namespace }} has been unreachable for 2 minutes"
+
+        - alert: PetrusHighMemoryUsage
+          expr: |
+            container_memory_usage_bytes{namespace=~".+-dev|.+-staging|.+-prod"}
+            / container_spec_memory_limit_bytes{namespace=~".+-dev|.+-staging|.+-prod"} > 0.85
+          for: 5m
+          labels:
+            severity: warning
+            managed_by: petrus
+          annotations:
+            summary: "High memory usage in Petrus environment"
+            description: "Environment {{ $labels.namespace }} is using >85% of its memory limit"
+
+        - alert: PetrusPodCrashLooping
+          expr: |
+            rate(kube_pod_container_status_restarts_total{
+              namespace=~".+-dev|.+-staging|.+-prod"
+            }[5m]) > 0
+          for: 2m
+          labels:
+            severity: warning
+            managed_by: petrus
+          annotations:
+            summary: "Pod crash looping in Petrus environment"
+            description: "Pod {{ $labels.pod }} in {{ $labels.namespace }} is restarting"
+
+        - alert: PetrusNamespaceQuotaExceeded
+          expr: |
+            kube_resourcequota{
+              namespace=~".+-dev|.+-staging|.+-prod",
+              type="used"
+            } / kube_resourcequota{
+              namespace=~".+-dev|.+-staging|.+-prod",
+              type="hard"
+            } > 0.90
+          for: 5m
+          labels:
+            severity: warning
+            managed_by: petrus
+          annotations:
+            summary: "Petrus environment approaching resource quota limit"
+            description: "{{ $labels.namespace }} is using >90% of its {{ $labels.resource }} quota"
